@@ -18,13 +18,13 @@ const genQue = [{
 },
 {
     type: "input",
-    name: "depAdd",
+    name: "depName",
     when: (answers) => answers.track === "Add a department",
     message: "Please enter the department name"
 },
 {
     type: "input",
-    name: "roleAdd",
+    name: "roleTitle",
     when: (answers) => answers.track === "Add a role",
     message: "Please enter the role title"
 },
@@ -42,21 +42,27 @@ const genQue = [{
 },
 {
     type: "input",
-    name: "empAdd",
-    when: (answers) => answers.track === "Add an employee",
-    message: "Please enter the employee's first name."
-},
-{
-    type: "input",
     name: "empFirst",
     when: (answers) => answers.track === "Add an employee",
-    message: "Please enter the employee's first name."
+    message: "Please enter the employee's first name"
 },
 {
     type: "input",
     name: "empLast",
     when: (answers) => answers.track === "Add an employee",
-    message: "Please enter the employee's first name."
+    message: "Please enter the employee's last name"
+},
+{
+    type: "input",
+    name: "empRole",
+    when: (answers) => answers.track === "Add an employee",
+    message: "Please enter the employee's role-id"
+},
+{
+    type: "input",
+    name: "empMang",
+    when: (answers) => answers.track === "Add an employee",
+    message: "Please enter the manager-id the employee will be under"
 },
 ];
 
