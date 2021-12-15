@@ -12,7 +12,8 @@ const genQue = [{
             "Add a department",
             "Add a role",
             "Add an employee",
-            "Update an employee role"
+            "Update an employee role",
+            "Quit"
     ]
 },
 {
@@ -59,14 +60,9 @@ const genQue = [{
 },
 ];
 
-const sendAnswers = async () => {
-const answers = await inquirer.prompt(genQue)
-if (answers.track === "Add a department") {
-    return db.query(`INSERT INTO role (id, title, salary, department_id)
-VALUES (${answers.depAdd}, ${answers.roleSal}, ${answers.roleSal}, ${answers.roleSal})`, function (err, results) {
-    console.log('SELECT COUNT', results);
-  });
-}
+const trackTeam = async () => {
+const answers = await inquirer.prompt(genQue);
+return answers
 }
 
 
@@ -74,5 +70,5 @@ VALUES (${answers.depAdd}, ${answers.roleSal}, ${answers.roleSal}, ${answers.rol
 
 
 
-module.exports = sendAnswers
+module.exports = trackTeam
 

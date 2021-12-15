@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
-const sendAnswers = require('./assets/index');
+const trackTeam = require('./assets/index');
+const hello = require('./helpers/utils');
 
 
 const PORT = process.env.PORT || 3001;
@@ -19,12 +20,16 @@ const db = mysql.createConnection(
     console.log(`Connected to the company_db database.`)
 );
 
-sendAnswers()
-
+const loop = async () => {
+    
 db.query(`INSERT INTO role (id, title, salary, department_id)
-VALUES (${answers.roleSal}, ${answers.roleSal}, ${answers.roleSal}, ${answers.roleSal})`, function (err, results) {
+VALUES (${trackTeam().roleSal}, ${trackTeam().roleSal}, ${trackTeam().roleSal}, ${trackTeam().roleSal})`, function (err, results) {
     console.log('SELECT COUNT', results);
   });
+}
+
+loop()
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
