@@ -31,11 +31,7 @@ const loop = async () => {
             console.table(results);
         });
     } else if (answers.track === "View all employees") {
-        // for (employee of employees) {
-        //     db.query(renderEmp(), function (err, results) {
-        //         console.table(results);
-        //     });
-        // }
+
         db.query('SELECT * FROM employee', function (err, results) {
             console.table(results);
         });
