@@ -1,2 +1,4 @@
     INSERT INTO department (name)
-    VALUES ("Robot")
+    VALUES ("HR")
+
+

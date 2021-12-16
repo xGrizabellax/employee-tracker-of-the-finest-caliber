@@ -1,19 +1,20 @@
 const inquirer = require('inquirer')
-const ansArray = []
+const Employee = require('./employee')
+const employees = []
 
 const genQue = [{
     type: "list",
     name: "track",
     message: "Welcome! What would you like to do?",
     choices: [
-            "View all departments",
-            "View all roles",
-            "View all employees",
-            "Add a department",
-            "Add a role",
-            "Add an employee",
-            "Update an employee role",
-            "Quit"
+        "View all departments",
+        "View all roles",
+        "View all employees",
+        "Add a department",
+        "Add a role",
+        "Add an employee",
+        "Update an employee role",
+        "Quit"
     ]
 },
 {
@@ -64,17 +65,48 @@ const genQue = [{
     when: (answers) => answers.track === "Add an employee",
     message: "Please enter the manager-id the employee will be under"
 },
+{
+    type: "list",
+    name: "empSelect",
+    when: (answers) => answers.track === "Update an employee role",
+    message: "Which employee would you like to update?",
+    choices: employees
+},
 ];
 
+// const empChoices = [{
+//     type: "list",
+//     name: "empSelect",
+//     message: "Which employee would you like to update?",
+//     choices: employees
+// },
+// ]
+
+
+
 const trackTeam = async () => {
-const answers = await inquirer.prompt(genQue);
-return answers
+    const answers = await inquirer.prompt(genQue);
+    return answers
 }
 
+const trackEmployees = async () => {
+        const answers = await inquirer.prompt(genQue);
+        if (answers.empFirst) {
+        const employee = await new Employee(answers.empFirst, answers.empLast, answers.empRole, answers.empMang);
+        employees.push(employee)
+        }
+        console.log(employees)
+        return employees
+    } 
+
+
+
+    trackEmployees()
 
 
 
 
 
-module.exports = trackTeam
+
+    module.exports = { trackTeam, trackEmployees, employees }
 
