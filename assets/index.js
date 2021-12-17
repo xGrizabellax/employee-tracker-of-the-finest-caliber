@@ -1,6 +1,6 @@
 const inquirer = require('inquirer')
 // const Employee = require('./employee')
-const 
+const selectStr = require('../helpers/utils')
 const employees = []
 
 const rootQue = [{
@@ -82,7 +82,7 @@ const updateEmployee = [{
 const rootQuestion = async () => {
     const rootAnswer = await inquirer.prompt(rootQue)
     switch (rootAnswer) {
-        case 'View all departments':
+        case "View all departments":
             viewAllDepartments();
             break;
         case 'View all roles':
@@ -102,7 +102,6 @@ const rootQuestion = async () => {
             break;
         
     }
-
 }
 
 function viewAllDepartments() {
@@ -142,6 +141,8 @@ const generateEmployee = async () => {
 }
 
 
+module.exports = rootQuestion
+
 // const empChoices = [{
 //     type: "list",
 //     name: "empSelect",
@@ -152,29 +153,30 @@ const generateEmployee = async () => {
 
 
 
-const trackTeam = async () => {
-    const answers = await inquirer.prompt(genQue);
+// const trackTeam = async () => {
+//     const answers = await inquirer.prompt(genQue);
     
-}
+// }
 
-const trackEmployees = async () => {
-        const answers = await inquirer.prompt(genQue);
-        if (answers.empFirst) {
-        const employee = await new Employee(answers.empFirst, answers.empLast, answers.empRole, answers.empMang);
-        employees.push(employee)
-        }
-        console.log(employees)
-        return employees
-    } 
-
-
-
-    trackEmployees()
+// const trackEmployees = async () => {
+//         const answers = await inquirer.prompt(genQue);
+//         if (answers.empFirst) {
+//         const employee = await new Employee(answers.empFirst, answers.empLast, answers.empRole, answers.empMang);
+//         employees.push(employee)
+//         }
+//         console.log(employees)
+//         return employees
+//     } 
 
 
+
+    // trackEmployees()
 
 
 
 
-    module.exports = { trackTeam, trackEmployees, employees }
+
+
+
+    // module.exports = { trackTeam, trackEmployees, employees }
 
