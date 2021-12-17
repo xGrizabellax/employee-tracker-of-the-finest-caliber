@@ -11,7 +11,7 @@
 //     }
 // }
 
-const selectStr = `SELECT * FROM ?`
+const selectStr = `SELECT * FROM ??`
 
 
 

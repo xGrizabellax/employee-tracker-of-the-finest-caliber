@@ -1,7 +1,19 @@
 const inquirer = require('inquirer')
-// const Employee = require('./employee')
-const selectStr = require('../helpers/utils')
+const selectStr = require('./helpers/utils')
 const employees = []
+const mysql = require('mysql2');
+const { initial } = require('lodash');
+// const dbDepAdd = require('./helpers/utils');
+
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: 'Password1',
+        database: 'company_db'
+    },
+    console.log(`Connected to the company_db database.`)
+);
 
 const rootQue = [{
     type: "list",
@@ -81,31 +93,38 @@ const updateEmployee = [{
 
 const rootQuestion = async () => {
     const rootAnswer = await inquirer.prompt(rootQue)
-    switch (rootAnswer) {
-        case "View all departments":
-            viewAllDepartments();
+    const choice = rootAnswer.track
+    switch (choice) {
+        case "View all departments" || 'View all roles' || 'View all employees':
+            viewAll(choice);
+            rootQuestion();
             break;
         case 'View all roles':
             viewAllRoles();
+            rootQuestion();
             break;
         case 'View all employees':
             viewAllEmployees();
+            rootQuestion();
             break;
         case 'Add a department':
             generateDepartment();
+            rootQuestion();
             break;
         case 'Add a role':
             generateRole();
+            rootQuestion();
             break;
         case 'Add an employee':
             generateEmployee();
+            rootQuestion();
             break;
         
     }
 }
 
-function viewAllDepartments() {
-    db.query('SELECT * FROM department', function (err, results) {
+function viewAllDepartments(choice) {
+    db.query(selectStr, `department`, function (err, results) {
         console.table(results);
     });
 }
@@ -119,6 +138,22 @@ function viewAllEmployees() {
         console.table(results);
     });
 }
+
+function viewAll(choice) {
+const choiceArray = choice.split(' ');
+console.log(choiceArray)
+const thirdWord = choiceArray[2].slice(0,-1)
+console.log(thirdWord)
+
+    db.query(selectStr, thirdWord, function (err, results) {
+        console.table(results);
+    });
+}
+
+function selectTable(choice) {
+
+}
+
 const generateDepartment = async () => {
     const depAnswers = await inquirer.prompt(departmentQue)
     db.query(`INSERT INTO department (name) VALUES ("${depAnswers.depName}")`, function (err, results) {
@@ -140,8 +175,13 @@ const generateEmployee = async () => {
     employees = employees.push(employee)
 }
 
+function init() {
+rootQuestion()
 
-module.exports = rootQuestion
+}
+
+init()
+// module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, generateDepartment, generateRole, generateEmployee, switchOperator, rootQuestion }
 
 // const empChoices = [{
 //     type: "list",

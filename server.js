@@ -1,8 +1,8 @@
 const mysql = require('mysql2');
-const { trackTeam, trackEmployees, employees } = require('./assets/index');
+const { trackTeam, trackEmployees, employees } = require('./index');
 const renderEmp = require('./helpers/utils');
 // const dbDepAdd = require('./helpers/utils');
-const rootQuestion = require('./assets/index')
+const { viewAllDepartments, viewAllRoles, viewAllEmployees, generateDepartment, generateRole, generateEmployee, switchOperator, rootQuestion} = require('./index')
 
 
 const db = mysql.createConnection(
@@ -16,33 +16,29 @@ const db = mysql.createConnection(
 );
 
 
-// const rootQuestion = async () => {
-//     const rootAnswer = await inquirer.prompt(rootQue)
-//     switch (rootAnswer) {
-//         case "View all departments":
-//             viewAllDepartments();
-//             break;
-//         case 'View all roles':
-//             viewAllRoles();
-//             break;
-//         case 'View all employees':
-//             viewAllEmployees();
-//             break;
-//         case 'Add a department':
-//             generateDepartment();
-//             break;
-//         case 'Add a role':
-//             generateRole();
-//             break;
-//         case 'Add an employee':
-//             generateEmployee();
-//             break;
+function switchOperator(rootAnswer) {
+    switch (rootAnswer) {
+        case "View all departments":
+            viewAllDepartments();
+            break;
+        case 'View all roles':
+            viewAllRoles();
+            break;
+        case 'View all employees':
+            viewAllEmployees();
+            break;
+        case 'Add a department':
+            generateDepartment();
+            break;
+        case 'Add a role':
+            generateRole();
+            break;
+        case 'Add an employee':
+            generateEmployee();
+            break;
         
-//     }
-
-// }
-
-
+    }
+}
 
 
 
