@@ -5,12 +5,14 @@
 //   });
 // }
 
-function renderEmp() {
-    for (employee of employees) {
-        return `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${employee.empFirst}", "${employee.empLast}", "${employee.empRole}", "${employee.empMang}")`
-    }
-}
+// function renderEmp() {
+//     for (employee of employees) {
+//         return `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${employee.empFirst}", "${employee.empLast}", "${employee.empRole}", "${employee.empMang}")`
+//     }
+// }
+
+const selectStr = `SELECT * FROM ?`
 
 
 
-module.exports = renderEmp
+module.exports = selectStr

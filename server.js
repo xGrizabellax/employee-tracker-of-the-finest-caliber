@@ -22,7 +22,6 @@ const loop = async () => {
     trackEmployees()
 
     if (answers.track === "View all departments") {
-        // dbDepAdd()
         db.query('SELECT * FROM department', function (err, results) {
             console.table(results);
         });
@@ -31,12 +30,10 @@ const loop = async () => {
             console.table(results);
         });
     } else if (answers.track === "View all employees") {
-
         db.query('SELECT * FROM employee', function (err, results) {
             console.table(results);
         });
     } else if (answers.track === "Add a department") {
-        // dbDepAdd()
         db.query(`INSERT INTO department (name) VALUES ("${answers.depName}")`, function (err, results) {
             console.table(results);
         });

@@ -1,9 +1,8 @@
 const inquirer = require('inquirer')
-// const Employee = require('./employee')
-const 
+const Employee = require('./employee')
 const employees = []
 
-const rootQue = [{
+const genQue = [{
     type: "list",
     name: "track",
     message: "Welcome! What would you like to do?",
@@ -17,14 +16,14 @@ const rootQue = [{
         "Update an employee role",
         "Quit"
     ]
-}]
-const departmentQue = [{
+},
+{
     type: "input",
     name: "depName",
     when: (answers) => answers.track === "Add a department",
     message: "Please enter the department name"
-}]
-const roleQue = [{
+},
+{
     type: "input",
     name: "roleTitle",
     when: (answers) => answers.track === "Add a role",
@@ -41,9 +40,8 @@ const roleQue = [{
     name: "roleDep",
     when: (answers) => answers.track === "Add a role",
     message: "Please enter the department of the role"
-}]
-
-const employeeQue = [{
+},
+{
     type: "input",
     name: "empFirst",
     when: (answers) => answers.track === "Add an employee",
@@ -66,9 +64,8 @@ const employeeQue = [{
     name: "empMang",
     when: (answers) => answers.track === "Add an employee",
     message: "Please enter the manager-id the employee will be under"
-}]
-
-const updateEmployee = [{
+},
+{
     type: "list",
     name: "empSelect",
     when: (answers) => answers.track === "Update an employee role",
@@ -76,71 +73,6 @@ const updateEmployee = [{
     choices: employees
 },
 ];
-
-
-
-const rootQuestion = async () => {
-    const rootAnswer = await inquirer.prompt(rootQue)
-    switch (rootAnswer) {
-        case 'View all departments':
-            viewAllDepartments();
-            break;
-        case 'View all roles':
-            viewAllRoles();
-            break;
-        case 'View all employees':
-            viewAllEmployees();
-            break;
-        case 'Add a department':
-            generateDepartment();
-            break;
-        case 'Add a role':
-            generateRole();
-            break;
-        case 'Add an employee':
-            generateEmployee();
-            break;
-        
-    }
-
-}
-
-function viewAllDepartments() {
-    db.query('SELECT * FROM department', function (err, results) {
-        console.table(results);
-    });
-}
-function viewAllRoles() {
-    db.query('SELECT * FROM role', function (err, results) {
-        console.table(results);
-    });
-}
-function viewAllEmployees() {
-    db.query('SELECT * FROM employee', function (err, results) {
-        console.table(results);
-    });
-}
-const generateDepartment = async () => {
-    const depAnswers = await inquirer.prompt(departmentQue)
-    db.query(`INSERT INTO department (name) VALUES ("${depAnswers.depName}")`, function (err, results) {
-        console.table(results);
-    });
-}
-const generateRole = async () => {
-    const roleAnswers = await inquirer.prompt(roleQue)
-    db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${roleAnswers.roleTitle}", "${roleAnswers.roleSal}", "${roleAnswers.roleDep}")`, function (err, results) {
-        console.table(results);
-    });
-}
-const generateEmployee = async () => {
-    const empAnswers = await inquirer.prompt(employeeQue)
-    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${answers.empFirst}", "${answers.empLast}", "${answers.empRole}", "${answers.empMang}")`, function (err, results) {
-        console.table(results);
-    });
-    const employee = `${empAnswers.empFirst} ${empAnswers.empLast}`
-    employees = employees.push(employee)
-}
-
 
 // const empChoices = [{
 //     type: "list",
@@ -154,7 +86,7 @@ const generateEmployee = async () => {
 
 const trackTeam = async () => {
     const answers = await inquirer.prompt(genQue);
-    
+    return answers
 }
 
 const trackEmployees = async () => {
