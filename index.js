@@ -2,9 +2,11 @@ const inquirer = require('inquirer')
 const selectStr = require('./helpers/utils')
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
-const { forEach } = require('lodash');
+const { listenerCount } = require('events');
+// const { forEach } = require('lodash');
 
 const db = mysql.createConnection(
+    
     {
         host: 'localhost',
         user: 'root',
@@ -12,7 +14,11 @@ const db = mysql.createConnection(
         database: 'company_db'
     },
     console.log(`Connected to the company_db database.`)
+
 );
+
+const promisePool = db.promise()
+
 
 const rootQue = [{
     type: "list",
@@ -87,16 +93,6 @@ const employeeQue = [{
     message: "Please enter the manager-id the employee will be under"
 }]
 
-// const updateEmployee = [{
-//     type: "list",
-//     name: "empSelect",
-//     message: "Which employee would you like to update?",
-//     choices: employees
-// },
-// ];
-
-
-
 const rootQuestion = async () => {
     const rootAnswer = await inquirer.prompt(rootQue)
     const choice = rootAnswer.track
@@ -119,8 +115,12 @@ const rootQuestion = async () => {
         case 'Update an employee role':
             updateEmployee();
             break;
+        case 'Quit':
+            db.end();
+            break;
 
     }
+
 }
 
 function viewAll(choice) {
@@ -158,6 +158,20 @@ const generateEmployee = async () => {
     rootQuestion();
 }
 
+const getEmployee = async () => {
+    const [rows] = await promisePool.query(`SELECT * FROM employee`)
+    const names = rows.map(row => row.first_name)
+    console.log(names)
+    const updateEmployee = {
+        type: "list",
+        name: "updateEmp",
+    }
+    const firstNamePrompt = await inquirer.prompt()
+
+
+}
+getEmployee()
+
 const updateEmployee = async () => {
     // const employees = db.query(`SELECT * FROM employee`);
     db.query(`SELECT * FROM employee`, function (err, res) {
@@ -167,8 +181,8 @@ const updateEmployee = async () => {
         res.forEach(res => empArray.push(res.first_name))
         console.log(empArray)
         const updateAnswers = inquirer.prompt()
-    });
 
+    });
 }
 
 function init() {
@@ -176,55 +190,14 @@ function init() {
 
 }
 
-db.query(`SELECT * FROM employee`, function (err, res) {
-    if (err) throw err;
-    // console.log(res)
-    const empArray = []
-    res.forEach(res => empArray.push(res.first_name))
-    console.log(empArray)
-});
-
-
+// db.query(`SELECT * FROM employee`, function (err, res) {
+//     if (err) throw err;
+//     // console.log(res)
+//     const empArray = []
+//     res.forEach(res => empArray.push(res.first_name))
+//     console.log(empArray)
+// });
 
 
 
 init()
-// module.exports = { viewAllDepartments, viewAllRoles, viewAllEmployees, generateDepartment, generateRole, generateEmployee, switchOperator, rootQuestion }
-
-// const empChoices = [{
-//     type: "list",
-//     name: "empSelect",
-//     message: "Which employee would you like to update?",
-//     choices: employees
-// },
-// ]
-
-
-
-// const trackTeam = async () => {
-//     const answers = await inquirer.prompt(genQue);
-
-// }
-
-// const trackEmployees = async () => {
-//         const answers = await inquirer.prompt(genQue);
-//         if (answers.empFirst) {
-//         const employee = await new Employee(answers.empFirst, answers.empLast, answers.empRole, answers.empMang);
-//         employees.push(employee)
-//         }
-//         console.log(employees)
-//         return employees
-//     } 
-
-
-
-    // trackEmployees()
-
-
-
-
-
-
-
-    // module.exports = { trackTeam, trackEmployees, employees }
-
