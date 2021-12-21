@@ -2,8 +2,7 @@ const inquirer = require('inquirer')
 const selectStr = require('./helpers/utils')
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
-const { listenerCount } = require('events');
-// const { forEach } = require('lodash');
+// const { listenerCount } = require('events');
 
 const db = mysql.createConnection(
     
@@ -113,7 +112,7 @@ const rootQuestion = async () => {
             generateEmployee();
             break;
         case 'Update an employee role':
-            updateEmployee();
+            chooseEmployee();
             break;
         case 'Quit':
             db.end();
@@ -130,6 +129,7 @@ function viewAll(choice) {
     db.query(selectStr, table, function (err, results) {
         console.table(results);
     });
+
 }
 
 const generateDepartment = async () => {
@@ -158,32 +158,65 @@ const generateEmployee = async () => {
     rootQuestion();
 }
 
-const getEmployee = async () => {
-    const [rows] = await promisePool.query(`SELECT * FROM employee`)
-    const names = rows.map(row => row.first_name)
-    console.log(names)
-    const updateEmployee = {
+const chooseTable = async (choice) => {
+    // const choiceArray = choice.split(' ');
+    // const table = choiceArray[2].slice(0, -1)
+    const table = choice
+
+    const [rows] = await promisePool.query(selectStr, table)
+    return rows
+
+}
+
+const chooseEmployee = async () => {
+    const empRows = await chooseTable('employee')
+    const roleRows = await chooseTable('role')
+    const roleIds = empRows.map(row => row.id)
+    const names = empRows.map(row => row.first_name + ' ' + row.last_name)
+    const roles = roleRows.map(row => row.title)
+
+// function getRoleId(str) {
+//     for (const i = 1; i < roles.length; i++) {
+//         if (roles[i] === str) {
+//             return i
+//         }
+//     }
+// }
+
+// function getEmployeeId() {
+    
+// }
+
+    const updateEmpRole = [{
         type: "list",
         name: "updateEmp",
-    }
-    const firstNamePrompt = await inquirer.prompt()
+        choices: names
+    },
+    {
+        type: "list",
+        name: "updateRole",
+        choices: roles
+    }]
+    const updateAnswers = await inquirer.prompt(updateEmpRole)
+    // db.query(`UPDATE employee SET role_id = ${getRoleId(updateAnswers.updateRole)} WHERE id = ${}`)
 
+    db.query(`UPDATE employee SET role_id = (SELECT id FROM role WHERE role.title = ${updateAnswers.updateRole}) WHERE employee.first_name = ${updateAnswers.updateEmp} AND employee.last_name = ${updateAnswers.updateEmp}`)
 
 }
-getEmployee()
+// chooseEmployee()
 
-const updateEmployee = async () => {
-    // const employees = db.query(`SELECT * FROM employee`);
-    db.query(`SELECT * FROM employee`, function (err, res) {
-        if (err) throw err;
-        // console.log(res)
-        const empArray = []
-        res.forEach(res => empArray.push(res.first_name))
-        console.log(empArray)
-        const updateAnswers = inquirer.prompt()
+// const updateEmployee = async () => {
+//     // const employees = db.query(`SELECT * FROM employee`);
+//     db.query(`SELECT * FROM employee`, function (err, res) {
+//         if (err) throw err;
+//         // console.log(res)
+//         const empArray = []
+//         res.forEach(res => empArray.push(res.first_name))
+//         console.log(empArray)
+//         const updateAnswers = inquirer.prompt()
 
-    });
-}
+//     });
+// }
 
 function init() {
     rootQuestion()
