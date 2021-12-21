@@ -40,65 +40,6 @@ const rootQue = [{
     ]
 }]
 
-// const departmentQue = [{
-//     type: "input",
-//     name: "depName",
-//     // when: (answers) => answers.track === "Add a department",
-//     message: "Please enter the department name",
-//     validate: (data) => {
-//         if (data === '') {
-//             return 'Please enter a department'
-//         };
-//         return true;
-//     }
-// }]
-
-// const roleQue = [{
-//     type: "input",
-//     name: "roleTitle",
-//     message: "Please enter the role title"
-// },
-// {
-//     type: "input",
-//     name: "roleSal",
-//     message: "Please enter the salary of the role"
-// },
-// {
-//     type: "list",
-//     name: "roleDep",
-//     message: "Please enter the department of the role",
-//     choices: getDepName()
-// }];
-
-// const employeeQue = [{
-//     type: "input",
-//     name: "empFirst",
-//     message: "Please enter the employee's first name"
-// },
-// {
-//     type: "input",
-//     name: "empLast",
-//     message: "Please enter the employee's last name"
-// },
-// {
-//     type: "input",
-//     name: "empRole",
-//     message: "Please enter the employee's role-id",
-//     validate: (data) => {
-//         if (isNaN(data)) {
-//             return `You did not enter a valid number`;
-//         } else if (data === '') {
-//             return `Please enter your role-id`
-//         }
-//         return true;
-//     }
-// },
-// {
-//     type: "input",
-//     name: "empMang",
-//     message: "Please enter the manager-id the employee will be under"
-// }]
-
 const rootQuestion = async () => {
     const rootAnswer = await inquirer.prompt(rootQue)
     const choice = rootAnswer.track
@@ -156,7 +97,7 @@ const generateDepartment = async (choice) => {
             return true;
         }
     }]
-    
+
     const depAnswers = await inquirer.prompt(departmentQue);
     db.query(`INSERT INTO department (name) VALUES ("${depAnswers.depName}")`, function (err, results) {
         console.table(results);
