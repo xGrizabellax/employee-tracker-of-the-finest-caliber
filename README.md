@@ -25,6 +25,7 @@ Having two terminals running side by side is the most efficient way to start app
   ![Screen Shot 2021-12-21 at 11 42 02 PM](https://user-images.githubusercontent.com/88065363/147042308-447613fa-6116-4f5c-b100-d28bb389e0ea.png)
 
   The inital start up view of application:
+  
   ![Screen Shot 2021-12-21 at 11 42 54 PM](https://user-images.githubusercontent.com/88065363/147042119-6bdd681c-1256-470e-9359-ae47d73427c1.png)
 
 
