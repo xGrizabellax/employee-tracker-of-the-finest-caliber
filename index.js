@@ -2,6 +2,10 @@ const inquirer = require('inquirer')
 const { splitRoleId, splitDepId, selectStr } = require('./helpers/utils')
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
+const logo = require('asciiart-logo');
+const config = require('./package.json')
+
+console.log(logo(config).render())
 
 const db = mysql.createConnection(
 
