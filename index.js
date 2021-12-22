@@ -44,7 +44,7 @@ const rootQuestion = async () => {
         case 'View all departments':
         case 'View all roles':
         case 'View all employees':
-            viewAll(choice);
+            await viewAll(choice);
             rootQuestion();
             break;
         case 'Add a department':
