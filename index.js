@@ -1,5 +1,5 @@
 const inquirer = require('inquirer')
-const { splitRoleId, selectStr } = require('./helpers/utils')
+const { splitRoleId, splitDepId, selectStr } = require('./helpers/utils')
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
 
@@ -16,13 +16,6 @@ const db = mysql.createConnection(
 );
 
 const promisePool = db.promise()
-// const depRows = await chooseTable('department')
-// const empRows = await chooseTable('employee')
-// const roleRows = await chooseTable('role')
-// const departments = depRows.map(row => row.name)
-// const names = empRows.map(row => row.id + ' ' + row.first_name + ' ' + row.last_name)
-// const roles = roleRows.map(row => row.title)
-
 
 const rootQue = [{
     type: "list",
@@ -84,7 +77,7 @@ function viewAll(choice) {
 
 }
 
-const generateDepartment = async (choice) => {
+const generateDepartment = async () => {
     const departmentQue = [{
         type: "input",
         name: "depName",
@@ -107,7 +100,7 @@ const generateDepartment = async (choice) => {
 
 const generateRole = async () => {
     const depRows = await chooseTable('department')
-    const departments = depRows.map(row => row.id + ' ' + row.name)
+    const departments = depRows.map(row => row.id + ') ' + row.name)
 
     const roleQue = [{
         type: "input",
@@ -128,12 +121,12 @@ const generateRole = async () => {
 
     const roleAnswers = await inquirer.prompt(roleQue)
 
-    function splitDepId(names) {
-        const nameArray = names.split(" ")
-        const depId = nameArray[0]
-        console.log(depId)
-        return depId
-    }
+    // function splitDepId(names) {
+    //     const nameArray = names.split(" ")
+    //     const depId = nameArray[0]
+    //     console.log(depId)
+    //     return depId
+    // }
 
     db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${roleAnswers.roleTitle}", "${roleAnswers.roleSal}", "${splitDepId(roleAnswers.roleDep)}")`, function (err, results) {
         console.table(results);
@@ -143,7 +136,7 @@ const generateRole = async () => {
 
 const generateEmployee = async () => {
     const roleRows = await chooseTable('role')
-    const roles = roleRows.map(row => row.id + ' ' + row.title)
+    const roles = roleRows.map(row => row.id + ') ' + row.title)
 
     const employeeQue = [{
         type: "input",
@@ -167,6 +160,11 @@ const generateEmployee = async () => {
         message: "Please enter the manager-id the employee will be under"
     }]
 
+    // db.query(`SELECT salary FROM role RIGHT JOIN department ON  `, function (err, results) {
+    //     console.table(results);
+    // });
+    // rootQuestion();
+
     const empAnswers = await inquirer.prompt(employeeQue)
 
     db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${empAnswers.empFirst}", "${empAnswers.empLast}", "${splitRoleId(empAnswers.empRole)}", "${empAnswers.empMang}")`, function (err, results) {
@@ -179,7 +177,7 @@ const chooseEmployee = async () => {
     const empRows = await chooseTable('employee')
     const roleRows = await chooseTable('role')
     // const roleIds = empRows.map(row => row.id)
-    const names = empRows.map(row => row.id + ' ' + row.first_name + ' ' + row.last_name)
+    const names = empRows.map(row => row.id + ') ' + row.first_name + ' ' + row.last_name)
     const roles = roleRows.map(row => row.title)
 
     const updateEmpRole = [{
@@ -194,7 +192,7 @@ const chooseEmployee = async () => {
     }]
     const updateAnswers = await inquirer.prompt(updateEmpRole)
 
-    db.query(`UPDATE employee SET role_id = (SELECT id FROM role WHERE role.title = "${updateAnswers.updateRole}") WHERE id = "${splitRoleId(updateAnswers.updateEmp)}"`)
+    await promisePool.query(`UPDATE employee SET role_id = (SELECT id FROM role WHERE role.title = "${updateAnswers.updateRole}") WHERE id = "${splitRoleId(updateAnswers.updateEmp)}"`)
 
     rootQuestion();
 }
